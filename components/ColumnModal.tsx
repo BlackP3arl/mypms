@@ -50,7 +50,7 @@ export function ColumnModal({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-black/50 z-40"
+            className="fixed inset-0 bg-black/60 dark:bg-black/80 backdrop-blur-sm z-40"
           />
 
           {/* Modal */}
@@ -61,38 +61,38 @@ export function ColumnModal({
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
             className="fixed inset-0 z-50 flex items-center justify-center p-4"
           >
-            <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden">
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full overflow-hidden border border-gray-200 dark:border-gray-700">
               {/* Header */}
-              <div className="flex items-center justify-between p-6 border-b border-gray-100">
-                <h2 className="text-xl font-bold text-gray-900">
+              <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-gray-900 dark:to-gray-800">
+                <h2 className="text-xl font-bold text-gray-900 dark:text-white">
                   {isEditMode ? 'Edit Column' : 'Add New Column'}
                 </h2>
                 <button
                   onClick={onClose}
-                  className="p-1 hover:bg-gray-100 rounded-lg transition-colors"
+                  className="p-1.5 hover:bg-white/50 dark:hover:bg-gray-700 rounded-lg transition-colors"
                 >
-                  <X className="w-5 h-5 text-gray-500" />
+                  <X className="w-5 h-5 text-gray-600 dark:text-gray-400" />
                 </button>
               </div>
 
               {/* Form */}
-              <form onSubmit={handleSubmit} className="p-6 space-y-4">
+              <form onSubmit={handleSubmit} className="p-6 space-y-5">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Column Title
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Column Title <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                     placeholder="Enter column title..."
-                    className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    className="w-full px-4 py-2.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-all text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500"
                     autoFocus
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-3">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
                     Column Color
                   </label>
                   <div className="grid grid-cols-4 gap-3">
@@ -103,10 +103,10 @@ export function ColumnModal({
                         whileHover={{ scale: 1.1 }}
                         whileTap={{ scale: 0.95 }}
                         onClick={() => setColor(col)}
-                        className={`w-12 h-12 rounded-lg transition-all border-2 ${col} ${
+                        className={`w-14 h-14 rounded-lg transition-all border-2 ${col} ${
                           color === col
-                            ? 'border-gray-900 shadow-lg'
-                            : 'border-gray-200 hover:border-gray-300'
+                            ? 'border-blue-600 dark:border-blue-400 shadow-lg ring-2 ring-blue-300 dark:ring-blue-500'
+                            : 'border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500'
                         }`}
                       />
                     ))}
@@ -118,15 +118,16 @@ export function ColumnModal({
                   <button
                     type="button"
                     onClick={onClose}
-                    className="flex-1 px-4 py-2 text-gray-700 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+                    className="flex-1 px-4 py-2.5 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors font-medium"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    className="flex-1 px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:shadow-lg hover:shadow-blue-500/30 transition-all font-medium"
+                    className="flex-1 px-4 py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 text-white rounded-lg hover:shadow-lg hover:shadow-blue-500/30 dark:hover:shadow-blue-500/50 transition-all font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                    disabled={!title.trim()}
                   >
-                    {isEditMode ? 'Update' : 'Create'}
+                    {isEditMode ? 'Update Column' : 'Create Column'}
                   </button>
                 </div>
               </form>
