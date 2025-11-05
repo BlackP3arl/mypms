@@ -200,3 +200,44 @@ export function useBoard() {
     saveBoard,
   }
 }
+
+export function useAIPromptGenerator() {
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  const generatePrompt = useCallback(
+    async (taskTitle: string): Promise<string | null> => {
+      setLoading(true)
+      setError(null)
+
+      try {
+        const response = await fetch('/api/generate-prompt', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ taskTitle }),
+        })
+
+        if (!response.ok) {
+          const errorData = await response.json()
+          throw new Error(errorData.error || 'Failed to generate prompt')
+        }
+
+        const data = await response.json()
+        return data.prompt
+      } catch (err) {
+        const errorMessage =
+          err instanceof Error ? err.message : 'Unknown error occurred'
+        setError(errorMessage)
+        console.error('Error generating prompt:', err)
+        return null
+      } finally {
+        setLoading(false)
+      }
+    },
+    []
+  )
+
+  return { generatePrompt, loading, error }
+}

@@ -13,22 +13,26 @@ import {
 } from '@dnd-kit/core'
 import { Plus } from 'lucide-react'
 import { Board as BoardType, Task, Column as ColumnType } from '@/lib/types'
-import { useBoard } from '@/lib/hooks'
+import { useBoard, useAIPromptGenerator } from '@/lib/hooks'
 import { Column } from './Column'
 import { Card } from './Card'
 import { TaskModal } from './TaskModal'
 import { ColumnModal } from './ColumnModal'
+import { PromptModal } from './PromptModal'
 import { COLUMN_COLORS } from '@/lib/utils'
 
 export function Board() {
   const { board, mounted, addTask, updateTask, deleteTask, moveTask, addColumn, updateColumn, deleteColumn } = useBoard()
+  const { generatePrompt, loading: aiLoading, error: aiError } = useAIPromptGenerator()
 
   const [activeId, setActiveId] = useState<string | null>(null)
   const [taskModalOpen, setTaskModalOpen] = useState(false)
   const [columnModalOpen, setColumnModalOpen] = useState(false)
+  const [promptModalOpen, setPromptModalOpen] = useState(false)
   const [selectedColumnId, setSelectedColumnId] = useState<string | null>(null)
   const [editingTask, setEditingTask] = useState<Task | null>(null)
   const [editingColumn, setEditingColumn] = useState<ColumnType | null>(null)
+  const [generatedPrompt, setGeneratedPrompt] = useState<string>('')
 
   const sensors = useSensors(
     useSensor(PointerSensor)
@@ -77,6 +81,14 @@ export function Board() {
       updateColumn(editingColumn.id, { title, color })
     } else {
       addColumn(title, color)
+    }
+  }
+
+  const handleGeneratePrompt = async (task: Task) => {
+    const prompt = await generatePrompt(task.title)
+    if (prompt) {
+      setGeneratedPrompt(prompt)
+      setPromptModalOpen(true)
     }
   }
 
@@ -147,6 +159,7 @@ export function Board() {
                     onEditTask={handleEditTask}
                     onDeleteColumn={deleteColumn}
                     onEditColumn={handleEditColumn}
+                    onGeneratePrompt={handleGeneratePrompt}
                   />
                 )
               })}
@@ -207,6 +220,14 @@ export function Board() {
         initialTitle={editingColumn?.title}
         initialColor={editingColumn?.color || COLUMN_COLORS[0]}
         isEditMode={!!editingColumn}
+      />
+
+      <PromptModal
+        isOpen={promptModalOpen}
+        onClose={() => setPromptModalOpen(false)}
+        prompt={generatedPrompt}
+        loading={aiLoading}
+        error={aiError}
       />
     </DndContext>
   )

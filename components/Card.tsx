@@ -2,7 +2,7 @@
 
 import { Task } from '@/lib/types'
 import { motion } from 'framer-motion'
-import { Trash2, Edit2 } from 'lucide-react'
+import { Trash2, Edit2, Sparkles } from 'lucide-react'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { formatDate } from '@/lib/utils'
@@ -11,9 +11,10 @@ interface CardProps {
   task: Task
   onDelete: (id: string) => void
   onEdit: (task: Task) => void
+  onGeneratePrompt?: (task: Task) => void
 }
 
-export function Card({ task, onDelete, onEdit }: CardProps) {
+export function Card({ task, onDelete, onEdit, onGeneratePrompt }: CardProps) {
   const {
     attributes,
     listeners,
@@ -51,6 +52,15 @@ export function Card({ task, onDelete, onEdit }: CardProps) {
             {task.title}
           </h3>
           <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+            {onGeneratePrompt && (
+              <button
+                onClick={() => onGeneratePrompt(task)}
+                className="p-1.5 hover:bg-yellow-50 rounded transition-colors"
+                title="Generate Claude Code prompt"
+              >
+                <Sparkles className="w-4 h-4 text-yellow-500" />
+              </button>
+            )}
             <button
               onClick={() => onEdit(task)}
               className="p-1.5 hover:bg-blue-50 rounded transition-colors"

@@ -17,6 +17,7 @@ interface ColumnProps {
   onEditTask: (task: Task) => void
   onDeleteColumn: (id: string) => void
   onEditColumn: (column: ColumnType) => void
+  onGeneratePrompt?: (task: Task) => void
 }
 
 export function Column({
@@ -27,6 +28,7 @@ export function Column({
   onEditTask,
   onDeleteColumn,
   onEditColumn,
+  onGeneratePrompt,
 }: ColumnProps) {
   const { setNodeRef, isOver } = useDroppable({
     id: column.id,
@@ -101,6 +103,7 @@ export function Column({
                     task={task}
                     onDelete={onDeleteTask}
                     onEdit={onEditTask}
+                    onGeneratePrompt={onGeneratePrompt}
                   />
                 ))
               ) : (
