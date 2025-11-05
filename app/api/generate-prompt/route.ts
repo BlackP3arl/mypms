@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server'
-import { OpenAI } from 'openai'
+import Anthropic from '@anthropic-ai/sdk'
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+const anthropic = new Anthropic({
+  apiKey: process.env.ANTHROPIC_API_KEY,
 })
 
 export async function POST(request: Request) {
@@ -16,19 +16,17 @@ export async function POST(request: Request) {
       )
     }
 
-    if (!process.env.OPENAI_API_KEY) {
+    if (!process.env.ANTHROPIC_API_KEY) {
       return NextResponse.json(
-        { error: 'OpenAI API key not configured' },
+        { error: 'Anthropic API key not configured' },
         { status: 500 }
       )
     }
 
-    const completion = await openai.chat.completions.create({
-      model: 'gpt-4o',
-      messages: [
-        {
-          role: 'system',
-          content: `You are an expert at creating detailed, actionable prompts for Claude Code (an AI coding assistant).
+    const message = await anthropic.messages.create({
+      model: 'claude-opus-4-1',
+      max_tokens: 500,
+      system: `You are an expert at creating detailed, actionable prompts for Claude Code (an AI coding assistant).
 When given a task title, generate a comprehensive prompt that:
 1. Clearly describes the feature or task to implement
 2. Includes any technical requirements
@@ -39,19 +37,18 @@ When given a task title, generate a comprehensive prompt that:
 
 The prompt should be ready to copy-paste directly into Claude Code to implement the feature.
 Keep the prompt concise but complete (2-4 paragraphs max).`,
-        },
+      messages: [
         {
           role: 'user',
           content: `Generate a Claude Code prompt for this task: "${taskTitle}"`,
         },
       ],
-      temperature: 0.7,
-      max_tokens: 500,
     })
 
     const prompt =
-      completion.choices[0]?.message?.content ||
-      'Failed to generate prompt'
+      message.content[0]?.type === 'text'
+        ? message.content[0].text
+        : 'Failed to generate prompt'
 
     return NextResponse.json({ prompt })
   } catch (error) {

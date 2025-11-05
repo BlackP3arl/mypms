@@ -25,14 +25,14 @@ A modern, feature-rich Kanban board application built with Next.js, TypeScript, 
 - **Drag & Drop**: @dnd-kit library
 - **Animations**: Framer Motion
 - **Icons**: Lucide React
-- **AI**: OpenAI API (GPT-4o)
+- **AI**: Anthropic API (Claude Opus 4.1)
 - **State Management**: React Hooks + localStorage
 
 ## 🚀 Getting Started
 
 ### Prerequisites
 - Node.js 18+ and npm
-- OpenAI API key (get one at https://platform.openai.com/api-keys)
+- Anthropic API key (get one at https://console.anthropic.com/)
 
 ### Installation
 
@@ -50,7 +50,7 @@ npm install
 3. **Set up environment variables**
 Create a `.env.local` file in the root directory:
 ```bash
-OPENAI_API_KEY=your_openai_api_key_here
+ANTHROPIC_API_KEY=your_anthropic_api_key_here
 ```
 
 > ⚠️ **Important**: Never commit `.env.local` to version control. It's already in `.gitignore`.
