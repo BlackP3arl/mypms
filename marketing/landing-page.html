@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Beautiful, browser-based Kanban board for task management. Works instantly with no sign-ups. Local storage keeps your data private. Free forever.">
+    <meta name="keywords" content="free kanban board, task management, privacy-first, project management, drag and drop">
+
+    <title>MyPMS – Free Kanban Board | Privacy-First Task Management</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #3b82f6;
+            --primary-dark: #2563eb;
+            --gray-900: #1e293b;
+            --gray-700: #334155;
+            --gray-600: #475569;
+            --gray-500: #64748b;
+            --gray-400: #94a3b8;
+            --gray-100: #f1f5f9;
+            --gray-50: #f8fafc;
+            --white: #ffffff;
+            --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-primary: linear-gradient(to right, #3b82f6, #2563eb);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            color: var(--gray-900);
+            line-height: 1.6;
+            background-color: var(--gray-50);
+        }
+
+        /* Navigation */
+        nav {
+            background: var(--white);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--gray-600);
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        /* Hero Section */
+        .hero {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 6rem 2rem;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--gray-600);
+            margin-bottom: 2.5rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-container {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: var(--white);
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--white);
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--gray-50);
+        }
+
+        /* Hero Image/Demo */
+        .hero-image {
+            margin-top: 4rem;
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            background: var(--gradient);
+            height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 1.5rem;
+        }
+
+        /* Features Section */
+        .features {
+            background: var(--white);
+            padding: 6rem 2rem;
+        }
+
+        .features-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            color: var(--gray-600);
+            margin-bottom: 4rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+        }
+
+        .feature-card {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--gray-900);
+        }
+
+        .feature-description {
+            color: var(--gray-600);
+            line-height: 1.7;
+        }
+
+        /* How It Works */
+        .how-it-works {
+            background: var(--gray-50);
+            padding: 6rem 2rem;
+        }
+
+        .steps-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-top: 4rem;
+        }
+
+        .step {
+            text-align: center;
+            padding: 2rem;
+            background: var(--white);
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .step-number {
+            display: inline-block;
+            width: 60px;
+            height: 60px;
+            line-height: 60px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            color: var(--white);
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        .step-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        /* Use Cases */
+        .use-cases {
+            background: var(--white);
+            padding: 6rem 2rem;
+        }
+
+        .use-cases-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .use-case-card {
+            padding: 2rem;
+            background: var(--gray-50);
+            border-radius: 1rem;
+            border-left: 4px solid var(--primary);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .use-case-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .use-case-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Testimonials */
+        .testimonials {
+            background: var(--gray-50);
+            padding: 6rem 2rem;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 3rem auto;
+        }
+
+        .testimonial {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            color: var(--gray-700);
+            margin-bottom: 1rem;
+            line-height: 1.7;
+        }
+
+        .testimonial-author {
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        .testimonial-role {
+            font-size: 0.9rem;
+            color: var(--gray-500);
+        }
+
+        /* Comparison Table */
+        .comparison {
+            background: var(--white);
+            padding: 6rem 2rem;
+        }
+
+        .comparison-table {
+            max-width: 800px;
+            margin: 3rem auto;
+            background: var(--white);
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 1.5rem;
+            text-align: left;
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        th {
+            background: var(--gradient-primary);
+            color: var(--white);
+            font-weight: 600;
+        }
+
+        td:first-child {
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        tr:hover {
+            background: var(--gray-50);
+        }
+
+        /* FAQ */
+        .faq {
+            background: var(--gray-50);
+            padding: 6rem 2rem;
+        }
+
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            background: var(--white);
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .faq-question {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--gray-900);
+        }
+
+        .faq-answer {
+            color: var(--gray-600);
+            line-height: 1.7;
+        }
+
+        /* Final CTA */
+        .final-cta {
+            background: var(--gradient);
+            color: var(--white);
+            padding: 6rem 2rem;
+            text-align: center;
+        }
+
+        .final-cta h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .final-cta p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+        }
+
+        .trust-elements {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+            font-size: 0.95rem;
+        }
+
+        .trust-element {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--gray-900);
+            color: var(--gray-400);
+            padding: 3rem 2rem 2rem;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-section h3 {
+            color: var(--white);
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-links a {
+            color: var(--gray-400);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: var(--white);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--gray-700);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .features-grid,
+            .use-cases-grid,
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero,
+        .feature-card,
+        .step,
+        .use-case-card,
+        .testimonial {
+            animation: fadeInUp 0.6s ease-out;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo">MyPMS</div>
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#how-it-works">How It Works</a></li>
+                <li><a href="#use-cases">Use Cases</a></li>
+                <li><a href="#faq">FAQ</a></li>
+                <li><a href="#" class="btn btn-primary" style="padding: 0.5rem 1.5rem; font-size: 1rem;">Try Now</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Beautifully Simple<br>Task Management</h1>
+        <p>Organize your tasks with a gorgeous drag-and-drop Kanban board. Works instantly in your browser. No sign-ups. No subscriptions. No cloud.</p>
+
+        <div class="cta-container">
+            <a href="#" class="btn btn-primary">Try MyPMS Now →</a>
+            <a href="#how-it-works" class="btn btn-secondary">See How It Works ↓</a>
+        </div>
+
+        <div class="hero-image">
+            <!-- Replace with actual screenshot/demo -->
+            [Insert MyPMS Screenshot/Demo Here]
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="features-container">
+            <h2 class="section-title">Everything You Need. Nothing You Don't.</h2>
+            <p class="section-subtitle">Simple by design. Powerful by nature.</p>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3 class="feature-title">Zero Setup</h3>
+                    <p class="feature-description">No accounts. No configuration. No learning curve. Just open your browser and start organizing. You'll be productive in seconds, not hours.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3 class="feature-title">Privacy First</h3>
+                    <p class="feature-description">Everything is stored locally on your device. No clouds, no servers, no tracking. Your tasks are yours—and only yours—forever.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🎨</div>
+                    <h3 class="feature-title">Beautiful Design</h3>
+                    <p class="feature-description">Smooth drag-and-drop. Gentle animations. Modern UI. We made every interaction satisfying because productivity should feel good.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3 class="feature-title">Customizable Workflow</h3>
+                    <p class="feature-description">Create unlimited columns for your unique workflow. Choose from 8 colors. Organize your way. MyPMS adapts to you, not the other way around.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">💯</div>
+                    <h3 class="feature-title">Free Forever</h3>
+                    <p class="feature-description">Completely free. No premium tiers. No feature limits. No credit card. Ever. Because task management should be accessible to everyone.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3 class="feature-title">Fast & Responsive</h3>
+                    <p class="feature-description">Local storage means instant performance. No loading spinners. No syncing delays. Every interaction happens at the speed of thought.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works" id="how-it-works">
+        <div class="steps-container">
+            <h2 class="section-title">Three Steps to Organized Bliss</h2>
+
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3 class="step-title">📋 Create Your Workflow</h3>
+                    <p>Add columns that match your process. Content pipeline? Development sprint? Personal goals? You decide.</p>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3 class="step-title">✍️ Add Your Tasks</h3>
+                    <p>Click to add tasks with titles and descriptions. Capture everything that needs to get done.</p>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3 class="step-title">🚀 Drag & Drop</h3>
+                    <p>Move tasks across columns as you make progress. Watch your workflow come to life.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Use Cases -->
+    <section class="use-cases" id="use-cases">
+        <div class="features-container">
+            <h2 class="section-title">Perfect For...</h2>
+
+            <div class="use-cases-grid">
+                <div class="use-case-card">
+                    <h3 class="use-case-title">💼 Freelancers</h3>
+                    <p>Track projects, deadlines, and deliverables across all your clients. Color code by client or priority. Stay organized without the overhead of enterprise tools.</p>
+                </div>
+
+                <div class="use-case-card">
+                    <h3 class="use-case-title">💻 Developers</h3>
+                    <p>Organize your backlog, track what you're building, and see what's shipped. Perfect for personal projects or small team coordination.</p>
+                </div>
+
+                <div class="use-case-card">
+                    <h3 class="use-case-title">🎓 Students</h3>
+                    <p>Keep track of homework, group projects, and exam prep. Free, simple, and always accessible.</p>
+                </div>
+
+                <div class="use-case-card">
+                    <h3 class="use-case-title">✍️ Content Creators</h3>
+                    <p>From idea to publication, visualize your entire content pipeline. Never wonder "what should I work on next?" again.</p>
+                </div>
+
+                <div class="use-case-card">
+                    <h3 class="use-case-title">👥 Small Teams</h3>
+                    <p>No complex permissions or seats. Pull up MyPMS on a shared screen and everyone sees what needs to be done.</p>
+                </div>
+
+                <div class="use-case-card">
+                    <h3 class="use-case-title">🔐 Privacy-Conscious Users</h3>
+                    <p>In a world of cloud surveillance, MyPMS respects your privacy by default. No servers, no tracking, no questions.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials">
+        <div class="features-container">
+            <h2 class="section-title">Loved By Makers, Creators, and Doers</h2>
+
+            <div class="testimonials-grid">
+                <div class="testimonial">
+                    <p class="testimonial-text">"Finally, a project management tool that doesn't require a PhD to use. I was organized in under a minute."</p>
+                    <div class="testimonial-author">Sarah M.</div>
+                    <div class="testimonial-role">Freelance Designer</div>
+                </div>
+
+                <div class="testimonial">
+                    <p class="testimonial-text">"I love that my data stays on my device. No cloud, no tracking, no worries. This is how software should be built."</p>
+                    <div class="testimonial-author">Alex K.</div>
+                    <div class="testimonial-role">Software Developer</div>
+                </div>
+
+                <div class="testimonial">
+                    <p class="testimonial-text">"Our study group uses MyPMS for project coordination. It's free, simple, and everyone gets it immediately. Perfect for students."</p>
+                    <div class="testimonial-author">Maya R.</div>
+                    <div class="testimonial-role">College Student</div>
+                </div>
+
+                <div class="testimonial">
+                    <p class="testimonial-text">"We tried Asana, Trello, and Monday.com. All overkill. MyPMS is exactly what a small team needs—nothing more, nothing less."</p>
+                    <div class="testimonial-author">David L.</div>
+                    <div class="testimonial-role">Small Business Owner</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Comparison -->
+    <section class="comparison">
+        <div class="features-container">
+            <h2 class="section-title">Why Choose MyPMS?</h2>
+
+            <div class="comparison-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th>MyPMS</th>
+                            <th>Others</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Setup Time</td>
+                            <td>0 seconds ✓</td>
+                            <td>5-30 minutes</td>
+                        </tr>
+                        <tr>
+                            <td>Monthly Cost</td>
+                            <td>$0 forever ✓</td>
+                            <td>$9-25+ per user</td>
+                        </tr>
+                        <tr>
+                            <td>Data Storage</td>
+                            <td>Your device ✓</td>
+                            <td>Their servers</td>
+                        </tr>
+                        <tr>
+                            <td>Privacy</td>
+                            <td>Complete ✓</td>
+                            <td>Limited</td>
+                        </tr>
+                        <tr>
+                            <td>Learning Curve</td>
+                            <td>None ✓</td>
+                            <td>Steep</td>
+                        </tr>
+                        <tr>
+                            <td>Account Required</td>
+                            <td>No ✓</td>
+                            <td>Yes</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq" id="faq">
+        <div class="faq-container">
+            <h2 class="section-title">Questions? Answers.</h2>
+
+            <div class="faq-item">
+                <div class="faq-question">Is MyPMS really free?</div>
+                <div class="faq-answer">Yes! Completely free. No subscriptions, no paywalls, no premium tiers. We believe task management should be accessible to everyone.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">Do I need to create an account?</div>
+                <div class="faq-answer">Nope! Just open MyPMS in your browser and start organizing. No sign-ups, no passwords, no verification emails.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">Where is my data stored?</div>
+                <div class="faq-answer">On your device, in your browser's local storage. It never leaves your computer. No servers, no cloud, no tracking.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">Can I use MyPMS on mobile?</div>
+                <div class="faq-answer">Yes! It works in mobile browsers. We're also working on native mobile apps based on user feedback.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">Can my team collaborate?</div>
+                <div class="faq-answer">Currently, MyPMS is perfect for individual use or small teams sharing a screen. Real-time collaboration features are on the roadmap!</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">Can I customize the columns?</div>
+                <div class="faq-answer">Absolutely! Create unlimited columns with custom names and choose from 8 colors to match your workflow.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="final-cta">
+        <h2>Ready to Get Organized?</h2>
+        <p>Start using MyPMS right now. No setup. No cost. No commitment.</p>
+        <a href="#" class="btn" style="background: white; color: #667eea; font-size: 1.2rem;">Try MyPMS Now – It's Free →</a>
+
+        <div class="trust-elements">
+            <div class="trust-element">✓ No credit card required</div>
+            <div class="trust-element">✓ No account needed</div>
+            <div class="trust-element">✓ Works instantly in your browser</div>
+            <div class="trust-element">✓ Your data stays private</div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>MyPMS</h3>
+                <p>Beautifully Simple Task Management</p>
+            </div>
+
+            <div class="footer-section">
+                <h3>Product</h3>
+                <ul class="footer-links">
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#how-it-works">How It Works</a></li>
+                    <li><a href="#use-cases">Use Cases</a></li>
+                    <li><a href="#faq">FAQ</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Resources</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Documentation</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Connect</h3>
+                <ul class="footer-links">
+                    <li><a href="#">GitHub</a></li>
+                    <li><a href="#">Twitter</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            © 2025 MyPMS. Built with ❤️ for makers and creators.
+        </div>
+    </footer>
+
+</body>
+</html>
