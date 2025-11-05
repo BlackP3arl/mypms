@@ -19,6 +19,7 @@ import { Card } from './Card'
 import { TaskModal } from './TaskModal'
 import { ColumnModal } from './ColumnModal'
 import { PromptModal } from './PromptModal'
+import { ThemeToggle } from './ThemeToggle'
 import { COLUMN_COLORS } from '@/lib/utils'
 
 export function Board() {
@@ -40,8 +41,8 @@ export function Board() {
 
   if (!mounted || !board) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500" />
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 dark:border-blue-400" />
       </div>
     )
   }
@@ -125,24 +126,27 @@ export function Board() {
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
     >
-      <div className="min-h-screen p-8">
+      <div className="min-h-screen p-4 sm:p-6 lg:p-8">
+        {/* Theme Toggle */}
+        <ThemeToggle />
+
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           className="max-w-7xl mx-auto"
         >
           {/* Header */}
-          <div className="mb-8">
-            <h1 className="text-4xl font-bold text-gray-900 mb-2">
+          <div className="mb-8 sm:mb-10">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-3 tracking-tight">
               {board.title}
             </h1>
-            <p className="text-gray-600">
+            <p className="text-base sm:text-lg text-gray-600 dark:text-gray-400">
               Organize and manage your tasks with ease
             </p>
           </div>
 
           {/* Columns */}
-          <div className="flex gap-6 overflow-x-auto pb-8">
+          <div className="flex gap-4 sm:gap-6 overflow-x-auto pb-8 scrollbar-thin">
             <AnimatePresence mode="popLayout">
               {board.columns.map((column) => {
                 const columnTasks = board.tasks
@@ -172,12 +176,12 @@ export function Board() {
               className="flex-shrink-0"
             >
               <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
                 onClick={handleAddColumn}
-                className="h-full min-h-96 w-72 rounded-xl border-2 border-dashed border-gray-300 hover:border-blue-400 bg-white/50 hover:bg-white transition-all flex items-center justify-center gap-2 text-gray-600 hover:text-blue-600 font-medium group"
+                className="h-full min-h-[24rem] w-72 sm:w-80 rounded-xl border-2 border-dashed border-gray-300 dark:border-gray-600 hover:border-blue-400 dark:hover:border-blue-500 bg-white/50 dark:bg-gray-800/50 hover:bg-white dark:hover:bg-gray-800 transition-all flex items-center justify-center gap-2 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 font-medium group backdrop-blur-sm"
               >
-                <Plus className="w-6 h-6 group-hover:rotate-90 transition-transform" />
+                <Plus className="w-6 h-6 group-hover:rotate-90 transition-transform duration-300" />
                 <span>Add Column</span>
               </motion.button>
             </motion.div>
@@ -189,12 +193,12 @@ export function Board() {
       <DragOverlay>
         {activeTask ? (
           <div className="opacity-100">
-            <div className="bg-white rounded-lg shadow-2xl p-4 w-80 border border-gray-200">
-              <h3 className="font-semibold text-gray-900 text-sm">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-2xl p-4 w-80 border border-gray-200 dark:border-gray-700 rotate-3">
+              <h3 className="font-semibold text-gray-900 dark:text-white text-sm">
                 {activeTask.title}
               </h3>
               {activeTask.description && (
-                <p className="text-sm text-gray-600 mt-2 line-clamp-2">
+                <p className="text-sm text-gray-600 dark:text-gray-400 mt-2 line-clamp-2">
                   {activeTask.description}
                 </p>
               )}
