@@ -51,10 +51,13 @@ export function Card({ task, onDelete, onEdit, onGeneratePrompt }: CardProps) {
           <h3 className="font-semibold text-gray-900 flex-1 line-clamp-2 text-sm leading-5">
             {task.title}
           </h3>
-          <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+          <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity" onClick={(e) => e.stopPropagation()}>
             {onGeneratePrompt && (
               <button
-                onClick={() => onGeneratePrompt(task)}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  onGeneratePrompt(task)
+                }}
                 className="p-1.5 hover:bg-yellow-50 rounded transition-colors"
                 title="Generate Claude Code prompt"
               >
@@ -62,14 +65,20 @@ export function Card({ task, onDelete, onEdit, onGeneratePrompt }: CardProps) {
               </button>
             )}
             <button
-              onClick={() => onEdit(task)}
+              onClick={(e) => {
+                e.stopPropagation()
+                onEdit(task)
+              }}
               className="p-1.5 hover:bg-blue-50 rounded transition-colors"
               title="Edit task"
             >
               <Edit2 className="w-4 h-4 text-blue-500" />
             </button>
             <button
-              onClick={() => onDelete(task.id)}
+              onClick={(e) => {
+                e.stopPropagation()
+                onDelete(task.id)
+              }}
               className="p-1.5 hover:bg-red-50 rounded transition-colors"
               title="Delete task"
             >
