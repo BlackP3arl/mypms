@@ -18,7 +18,6 @@ import { Column } from './Column'
 import { Card } from './Card'
 import { TaskModal } from './TaskModal'
 import { ColumnModal } from './ColumnModal'
-import { PromptModal } from './PromptModal'
 import { ThemeToggle } from './ThemeToggle'
 import { COLUMN_COLORS } from '@/lib/utils'
 
@@ -29,11 +28,9 @@ export function Board() {
   const [activeId, setActiveId] = useState<string | null>(null)
   const [taskModalOpen, setTaskModalOpen] = useState(false)
   const [columnModalOpen, setColumnModalOpen] = useState(false)
-  const [promptModalOpen, setPromptModalOpen] = useState(false)
   const [selectedColumnId, setSelectedColumnId] = useState<string | null>(null)
   const [editingTask, setEditingTask] = useState<Task | null>(null)
   const [editingColumn, setEditingColumn] = useState<ColumnType | null>(null)
-  const [generatedPrompt, setGeneratedPrompt] = useState<string>('')
 
   const sensors = useSensors(
     useSensor(PointerSensor)
@@ -88,8 +85,13 @@ export function Board() {
   const handleGeneratePrompt = async (task: Task) => {
     const prompt = await generatePrompt(task.title)
     if (prompt) {
-      setGeneratedPrompt(prompt)
-      setPromptModalOpen(true)
+      // Append the generated prompt to the task description
+      const updatedDescription = task.description
+        ? `${task.description}\n\n📝 AI-Generated Prompt:\n${prompt}`
+        : `📝 AI-Generated Prompt:\n${prompt}`
+
+      // Update the task with the new description
+      updateTask(task.id, { description: updatedDescription })
     }
   }
 
@@ -224,14 +226,6 @@ export function Board() {
         initialTitle={editingColumn?.title}
         initialColor={editingColumn?.color || COLUMN_COLORS[0]}
         isEditMode={!!editingColumn}
-      />
-
-      <PromptModal
-        isOpen={promptModalOpen}
-        onClose={() => setPromptModalOpen(false)}
-        prompt={generatedPrompt}
-        loading={aiLoading}
-        error={aiError}
       />
     </DndContext>
   )

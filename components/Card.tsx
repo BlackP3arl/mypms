@@ -88,9 +88,31 @@ export function Card({ task, onDelete, onEdit, onGeneratePrompt }: CardProps) {
         </div>
 
         {task.description && (
-          <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-3 mb-3">
-            {task.description}
-          </p>
+          <div className="mb-3">
+            {task.description.includes('📝 AI-Generated Prompt:') ? (
+              <div className="text-xs text-gray-600 dark:text-gray-400 space-y-2">
+                {task.description.split('📝 AI-Generated Prompt:').map((part, idx) => (
+                  <div key={idx}>
+                    {idx === 0 && part.trim() && (
+                      <p className="text-sm mb-2 whitespace-pre-wrap line-clamp-2">{part.trim()}</p>
+                    )}
+                    {idx === 1 && (
+                      <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded p-2">
+                        <p className="font-semibold text-yellow-900 dark:text-yellow-200 text-xs mb-1">AI Prompt:</p>
+                        <p className="text-yellow-800 dark:text-yellow-300 whitespace-pre-wrap line-clamp-4 text-xs">
+                          {part.trim()}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-3 whitespace-pre-wrap">
+                {task.description}
+              </p>
+            )}
+          </div>
         )}
 
         <div className="flex items-center justify-between pt-2 border-t border-gray-200 dark:border-gray-700">
